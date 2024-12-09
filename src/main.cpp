@@ -77,8 +77,23 @@ void setup()
 //   lampControlTask.enable();
 
   /* Configure the wake up source(s): */
-  gpio_wakeup_enable((gpio_num_t)TRIG_PIN, GPIO_INTR_HIGH_LEVEL);      // TODO: what level does pin use???
+  gpio_wakeup_enable((gpio_num_t)TRIG_PIN, GPIO_INTR_LOW_LEVEL);      // TODO: what level does pin use???
   esp_sleep_enable_gpio_wakeup();
+
+  while(true)
+  {
+      (void)esp_light_sleep_start();
+  
+        // Woken UP - so play sound:
+        // TODO: play sound here!
+        
+        // Then, turn lamp ON:
+        warnLamp.TurnOn();
+        delay(15000UL);   // Wait 2min. 30sec. = 150sec = 15000ms.
+        warnLamp.TurnOff();
+        gpio_wakeup_enable((gpio_num_t)TRIG_PIN, GPIO_INTR_LOW_LEVEL);      // TODO: what level does pin use???
+
+  }
 }
 
 
@@ -86,15 +101,8 @@ void loop()
 {
   // it will run the user scheduler as well
   //mesh.update();
-  (void)esp_light_sleep_start();
-  
-  // Woken UP - so play sound:
-  // TODO: play sound here!
-  
-  // Then, turn lamp ON:
-  warnLamp.TurnOn();
-  delay(150000UL);   // Wait 2min. 30sec.
-  warnLamp.TurnOff();
+
+  delay(100);       // NEVER reached!!
 }
 
 
